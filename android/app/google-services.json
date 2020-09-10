@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "992724372775",
+    "firebase_url": "https://ordery-50025.firebaseio.com",
+    "project_id": "ordery-50025",
+    "storage_bucket": "ordery-50025.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:992724372775:android:b9af0f6a056c64f28a6d02",
+        "android_client_info": {
+          "package_name": "com.example.ordery"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "992724372775-42mk3fk2df9vne7elt2n6n8pbtte5306.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDiKiNQc4ZLlTrmqRTOTvHqKRSvHQt-0Ok"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "992724372775-42mk3fk2df9vne7elt2n6n8pbtte5306.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

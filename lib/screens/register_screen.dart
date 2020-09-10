@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:ordery/providers/category.dart';
+import 'package:ordery/providers/product.dart';
+import 'package:ordery/providers/restaurant.dart';
+import 'package:ordery/providers/user.dart';
+import 'package:ordery/screens/home.dart';
 import 'package:ordery/screens/login_screen.dart';
+import 'package:provider/provider.dart';
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -7,29 +13,41 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  final _key = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
+
+    final authProvider = Provider.of<UserProvider>(context);
+    final categoryProvider = Provider.of<CategoryProvider>(context);
+    final restaurantProvider = Provider.of<RestaurantProvider>(context);
+    final productProvider = Provider.of<ProductProvider>(context);
+
     return Scaffold(
+      key: _key,
+
       backgroundColor: Color(0xffFDFDFE),
-      body: SingleChildScrollView(
+      body: authProvider.status == Status.Authenticating ?
+          Center(
+            child: CircularProgressIndicator(),
+          )
+     : SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            SizedBox(
-              height: 50,
-            ),
+
             Align(
               alignment: Alignment.center,
               child: Container(
+                  height: MediaQuery.of(context).size.height*0.4,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                   ),
-                  child: Image.asset('assets/images/logo.jpg')),
+                  child: Image.asset('assets/images/logo.png')),
             ),
             Text(
               'Ordery',
-              style: TextStyle(fontSize: 35, color: Colors.green ,fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 35, color: Color(0xffF22A2A) ,fontWeight: FontWeight.bold),
             ),
 
             Container(
@@ -45,6 +63,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 borderRadius: BorderRadius.circular(15),
               ),
               child: TextFormField(
+                controller: authProvider.name,
                 decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: "Username",
@@ -64,6 +83,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 borderRadius: BorderRadius.circular(15),
               ),
               child: TextFormField(
+                controller: authProvider.email,
                 decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: "Email",
@@ -83,32 +103,49 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 borderRadius: BorderRadius.circular(15),
               ),
               child: TextFormField(
+                controller: authProvider.password,
                 decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: "Password",
                     icon: Icon(Icons.lock)),
               ),
             ),
-            Container(
-              margin: EdgeInsets.all(15),
-              padding: EdgeInsets.only(
-                left: 10,
-              ),
-              width: MediaQuery.of(context).size.width * 0.9,
-              height: 40,
-              decoration: BoxDecoration(
-                color: Colors.red,
-                //  border: Border.all(color: Colors.grey,),
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: Align(
-                alignment: Alignment.center,
-                child: Text(
-                  'Login',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18),
+            GestureDetector(
+              onTap: ()async{
+                if(!await authProvider.signUp()){
+                  _key.currentState.showSnackBar(
+                      SnackBar(content: Text("Resgistration failed!"))
+                  );
+                  return;
+                }
+                categoryProvider.loadCategories();
+                restaurantProvider.loadSingleRestaurant();
+                productProvider.loadProducts();
+                authProvider.clearController();
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => HomeScreen()));
+              },
+              child: Container(
+                margin: EdgeInsets.all(15),
+                padding: EdgeInsets.only(
+                  left: 10,
+                ),
+                width: MediaQuery.of(context).size.width * 0.9,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: Color(0xffF22A2A),
+                  //  border: Border.all(color: Colors.grey,),
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    'Register',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18),
+                  ),
                 ),
               ),
             ),
